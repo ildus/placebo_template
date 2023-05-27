@@ -4,7 +4,7 @@
 
 extern crate panic_halt;
 extern crate rtic;
-extern crate stm32g0xx_hal as hal;
+extern crate stm32c0xx_hal as hal;
 
 use defmt_rtt as _;
 
@@ -23,7 +23,7 @@ mod app {
     #[local]
     struct Local {
         frame: usize,
-        led: PA0<Output<OpenDrain>>,
+        led: PA5<Output<OpenDrain>>,
         timer: Timer<stm32::TIM16>,
     }
 
@@ -34,7 +34,7 @@ mod app {
         let mut rcc = ctx.device.RCC.constrain();
 
         let port_a = ctx.device.GPIOA.split(&mut rcc);
-        let led = port_a.pa0.into_open_drain_output_in_state(PinState::High);
+        let led = port_a.pa5.into_open_drain_output_in_state(PinState::High);
 
         let mut timer = ctx.device.TIM16.timer(&mut rcc);
         timer.start(50.millis());
