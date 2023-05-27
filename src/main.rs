@@ -23,7 +23,7 @@ mod app {
     #[local]
     struct Local {
         frame: usize,
-        led: PA5<Output<OpenDrain>>,
+        led: PA5<Output<PushPull>>,
         timer: Timer<stm32::TIM16>,
     }
 
@@ -32,9 +32,8 @@ mod app {
         defmt::info!("init");
 
         let mut rcc = ctx.device.RCC.constrain();
-
-        let port_a = ctx.device.GPIOA.split(&mut rcc);
-        let led = port_a.pa5.into_open_drain_output_in_state(PinState::High);
+        let gpioa = ctx.device.GPIOA.split(&mut rcc);
+        let led = gpioa.pa5.into_push_pull_output();
 
         let mut timer = ctx.device.TIM16.timer(&mut rcc);
         timer.start(50.millis());
